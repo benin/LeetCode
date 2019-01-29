@@ -15,7 +15,7 @@ namespace TwoSum
                 }    
             }
 
-            return new[] {0,0};
+            throw new ArgumentException("The solution has not been found.");
         }
     }
 }
