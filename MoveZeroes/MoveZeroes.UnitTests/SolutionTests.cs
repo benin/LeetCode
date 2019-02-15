@@ -15,7 +15,14 @@ namespace MoveZeroes.UnitTests
         [Test, TestCaseSource(typeof(BunchTestData), "TestData")]
         public int[] MoveZeroes(int[] nums)
         {
-            new LinearSolution().MoveZeroes(nums);
+            new Solution().MoveZeroes(nums);
+            return nums;
+        }
+
+        [Test, TestCaseSource(typeof(BunchTestData), "TestData")]
+        public int[] MoveZeroesLinear(int[] nums)
+        {
+            new SolutionLinear().MoveZeroes(nums);
             return nums;
         }
     }
