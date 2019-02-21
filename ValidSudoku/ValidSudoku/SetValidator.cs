@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace ValidSudoku
@@ -7,15 +8,21 @@ namespace ValidSudoku
     public class SetValidator
     {
         private readonly HashSet<int> _set = new HashSet<int>();
-        
-        public bool AddUnique(int val)
-        {
-            return _set.Add(val);
-        }
 
-        public void Reset()
+        private readonly bool _isUnique;
+        public bool IsUnique => _isUnique;
+        
+        public SetValidator(IEnumerable<int> nums)
         {
-            _set.Clear();
+            _isUnique = true;
+            foreach(var num in nums)
+            {
+                if (num != 0 && !_set.Add(num))
+                {
+                    _isUnique = false;
+                    break;
+                }
+            }
         }
     }
 }

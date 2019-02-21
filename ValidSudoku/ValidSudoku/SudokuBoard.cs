@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ValidSudoku
 {
@@ -23,6 +25,30 @@ namespace ValidSudoku
             }
         }
 
+        private IEnumerable<int> Row(int row)
+        {
+            for (int i = 0; i < BoardSize; ++i)
+                yield return _boardData[row, i];
+        }
+
+        private IEnumerable<int> Col(int col)
+        {
+            for (int i = 0; i < BoardSize; ++i)
+                yield return _boardData[i, col];
+        }
+
+        private IEnumerable<int> SubSquare(int squareRow, int squareCol)
+        {
+            const int squareSize = 3;
+            for (int row = squareRow * squareSize; row < (squareRow + 1) * squareSize; ++row)
+            {
+                for( int col = squareCol * squareSize; col < (squareCol + 1) * squareSize; ++col)
+                {
+                    yield return _boardData[row, col];
+                }
+            }
+        }
+
         public bool IsValid()
         {
             return 
@@ -33,15 +59,11 @@ namespace ValidSudoku
 
         private bool CheckRows()
         {
-            var setValidator = new SetValidator();
             for (int row = 0; row < BoardSize; ++row)
             {
-                setValidator.Reset();
-                for (int col = 0; col < BoardSize; ++col)
-                {
-                    if(_boardData[row, col] != 0 && !setValidator.AddUnique(_boardData[row, col]))
-                        return false;
-                }
+                var setValidator = new SetValidator(Row(row));
+                if (!setValidator.IsUnique)
+                    return false;
             }
 
             return true;
@@ -49,15 +71,12 @@ namespace ValidSudoku
 
         private bool CheckCols()
         {
-            var setValidator = new SetValidator();
+            
             for (int col = 0; col < BoardSize; ++col)
             {
-                setValidator.Reset();
-                for (int row = 0; row < BoardSize; ++row)
-                {
-                    if(_boardData[row, col] != 0 && !setValidator.AddUnique(_boardData[row, col]))
-                        return false;
-                }
+                var setValidator = new SetValidator(Col(col));
+                if (!setValidator.IsUnique)
+                    return false;
             }
 
             return true;
@@ -70,24 +89,8 @@ namespace ValidSudoku
             {
                 for( int col = 0; col < squareSize; ++col)
                 {
-                    if(!CheckSquare(row, col))
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool CheckSquare(int squareRow, int squareCol)
-        {
-            const int squareSize = 3;
-            var setValidator = new SetValidator();
-
-            for (int row = squareRow * squareSize; row < (squareRow + 1) * squareSize; ++row)
-            {
-                for( int col = squareCol * squareSize; col < (squareCol + 1) * squareSize; ++col)
-                {
-                    if(_boardData[row, col] != 0 && !setValidator.AddUnique(_boardData[row, col]))
+                    var setValidator = new SetValidator(SubSquare(row, col));
+                    if (!setValidator.IsUnique)
                         return false;
                 }
             }
