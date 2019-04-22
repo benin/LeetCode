@@ -27,6 +27,7 @@ namespace ReverseInteger.UnitTests
                 yield return new TestCaseData(-123).Returns(-321);
                 yield return new TestCaseData(120).Returns(21);
                 yield return new TestCaseData(1534236469).Returns(0);
+                yield return new TestCaseData(1563847412).Returns(0);
 
                 yield return new TestCaseData(0).Returns(0);
                 yield return new TestCaseData(1).Returns(1);

@@ -6,26 +6,19 @@ namespace ReverseInteger
     {
         public int Reverse(int x)
         {
-            int res = 0;
-
-            try
+            long res = 0;
+            while(x != 0)
             {
-                while (x != 0)
-                {
-                    int part = x % 10;
-                    x /= 10;
-                    checked
-                    {
-                        res *= 10;
-                        res += part;
-                    }
-                }
-            } catch (System.OverflowException e)
-            {
-                res = 0;
+                int part = x % 10;
+                x /= 10;
+                res *= 10;
+                res += part;
             }
 
-            return res;
+            if (Math.Abs(res) > Int32.MaxValue)
+                return 0;
+
+            return (int)res;
         }
     }
 }
